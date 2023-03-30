@@ -1,7 +1,7 @@
 //Utility functions
 
 /**
- * Normalize a value to use as a port
+ * Normalizes a value to use as a port
  * @param {String} val - the value to normalize
  * @returns {String | Number | Boolean}
  */
@@ -20,7 +20,7 @@ export const normalizePort = val => {
 }
 
 /**
- * Handle errors for server listen
+ * Handles errors for server listen
  * @param {Error} error - The error object 
  * @param {String | Number} port - The port number or name the server is listening on
  */
@@ -41,3 +41,16 @@ export const serverErrorHandler = (error, port, server) => {
             throw error;
     }
 }
+
+/**
+ * Validates the body of the request
+ * @param {Object} body - Object to validate 
+ * @returns Object
+ */
+export const validateInput = body => {
+    if (!Object.keys(body).every(key => (body[key]))) {
+        return { error: "Missing required property" };
+    }
+    return body;
+}
+

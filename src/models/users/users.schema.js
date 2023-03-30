@@ -1,11 +1,11 @@
 import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema({
-    firstName: {
+    firstname: {
         type: String,
         required: true
     },
-    lastName: {
+    lastname: {
         type: String,
         required: true
     },
@@ -19,18 +19,19 @@ const userSchema = new mongoose.Schema({
 });
 
 // Validates the uniqueness of the email before saving
-userSchema.pre("save", next => {
+userSchema.pre("save", async function(next) {
     const user = this;
-    mongoose.models.User.findOne({email: user.email}, (err, userExists) => {
-        if (err) {
-            return next(err);
-        }
+    try {
+        const userExists = await mongoose.models.User.findOne({email: user.email}); 
         if (userExists) {
             const error = new Error("Email already exists");
             return next(error);
         }
         next();
-    });
+    } catch (error) {
+        return next(error);
+    }
 });
+
 
 export default mongoose.model("User", userSchema);

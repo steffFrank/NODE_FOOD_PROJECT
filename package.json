@@ -1,7 +1,7 @@
 {
   "name": "node_food_project",
   "version": "1.0.0",
-  "description": "",
+  "description": "S2I Food API project",
   "type": "module",
   "main": "src/server.js",
   "scripts": {
