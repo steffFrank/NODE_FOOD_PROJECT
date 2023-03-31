@@ -31,3 +31,20 @@ export const mongoConnect = async () => {
 export const mongoDisconnect = async () => {
     await mongoose.disconnect();
 }
+
+export const uniqueValidator = async (schema, field) => {
+    schema.pre("save", async function(next) {
+        const doc = this;
+        try {
+            const model = mongoose.models[doc.constructor.modelName]
+            const fieldExists = await model.findOne({[field]: doc[field]}); 
+            if (fieldExists) {
+                const error = new Error("Email already exists");
+                return next(error);
+            }
+            next();
+        } catch (error) {
+            return next(error);
+        }
+    });
+}
