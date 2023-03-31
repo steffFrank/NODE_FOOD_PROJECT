@@ -1,4 +1,4 @@
-import { addNewUser } from "../../models/users/users.model.js";
+import { addNewUser, deleteUser, updateUser } from "../../models/users/users.model.js";
 import { validateInput } from "../../utils/functions.utils.js";
 
 export const httpAddNewUser = async (req, res) => {
@@ -10,9 +10,36 @@ export const httpAddNewUser = async (req, res) => {
 
     try {
         await addNewUser(user);
-        return res.status(201).json(user);
+        return res.status(201).json({message: "User registered successfully"});
     } catch(error) {
         return res.status(400).json({error: error.message});
     }
 }
 
+export const httpUpdateUser = async (req, res) => {
+    const user = validateInput(req.body);
+    if (user.error) {
+        return res.status(400).json({ error: user.error });
+    }
+
+    try {
+        await updateUser(user);
+        return res.status(200).json({message: "User updated successfully"});
+    } catch (error) {
+        return res.status(400).json({ error: "An error occured updating the user"})
+    }
+}
+
+export const httpDeleteUser = async (req, res) => {
+    const user = validateInput(req.body);
+    if (user.error) {
+        return res.status(400).json({ error: user.error });
+    }
+
+    try {
+        await deleteUser(user);
+        return res.status(200).json({ message: "User deleted successfully"});
+    } catch(error) {
+        return res.status(400).json({ error: "An error occured updating the user"})
+    }
+}
