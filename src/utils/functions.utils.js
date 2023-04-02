@@ -1,3 +1,4 @@
+import fs from "fs/promises";
 //Utility functions
 
 /**
@@ -29,7 +30,7 @@ export const serverErrorHandler = (error, port, server) => {
         throw error;
     }
     const address = server.address();
-    const bind = typeof address === "string" ? "pipe " + address : "PORT" + port;
+    const bind = typeof address === "string" ? "pipe " + address : "PORT " + port;
     switch (error.code) {
         case "EACCES":
             console.error(bind + " requires elevated privileges.");
@@ -42,15 +43,14 @@ export const serverErrorHandler = (error, port, server) => {
     }
 }
 
-/**
- * Validates the body of the request
- * @param {Object} body - Object to validate 
- * @returns Object
- */
-export const validateInput = body => {
-    if (!Object.keys(body).every(key => (body[key]))) {
-        return { error: "Missing required property" };
-    }
-    return body;
-}
 
+/**
+ * Remove the image from the path
+ * @param {String} path - local path where to remove the image
+ * @param {String} imageUrl - image url from the database
+ */
+export const removeImageFromPath = async (path, imageUrl) => {
+    // Retrieve the filename of the image
+    const filename = imageUrl.split(`/${path}/`)[1];
+    await fs.unlink(`${path}/${filename}`); // Remove the image
+}

@@ -39,7 +39,7 @@ export const uniqueValidator = async (schema, field) => {
             const model = mongoose.models[doc.constructor.modelName]
             const fieldExists = await model.findOne({[field]: doc[field]}); 
             if (fieldExists) {
-                const error = new Error("Email already exists");
+                const error = new Error(`${doc[field]} already exists`);
                 return next(error);
             }
             next();

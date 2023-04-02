@@ -8,6 +8,10 @@ export const updateUser = async user => {
     await users.findOneAndUpdate({email: user.email}, {firstname: user.firstname, lastname: user.lastname});
 }
 
-export const deleteUser = async user => {
-    await users.deleteOne({email: user.email});
+export const deleteUser = async email => {
+    const result = await users.deleteOne({email});
+    console.log(result.deletedCount);
+    if (result.deletedCount === 1) return true;
+    return false;
 }
+
