@@ -5,9 +5,9 @@ const IMAGE_PATH = "uploads";
 export const httpAddNewProduct = async (req, res) => {
     const productObject = req.body;
    
-    if (productObject.quantity <= 0 || productObject.quantity > 10) {
-        return res.status(400).json({message: "Product quantity not available"});
-    }
+    // if (productObject.quantity <= 0 || productObject.quantity > 10) {
+    //     return res.status(400).json({message: "Product quantity not available"});
+    // }
 
     try {
         const imageUrl = `${req.protocol}://${req.get("host")}/${IMAGE_PATH}/${req.file.filename}`;
@@ -21,3 +21,5 @@ export const httpAddNewProduct = async (req, res) => {
         res.status(400).json({error: error.message});
     }
 }
+
+
