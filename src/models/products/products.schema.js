@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { uniqueValidator } from "../../utils/mongo.utils";
+import { uniqueValidator } from "../../utils/mongo.utils.js";
 
 const productSchema = new mongoose.Schema({
     name: {

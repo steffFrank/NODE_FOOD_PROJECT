@@ -1,11 +1,7 @@
 import { addNewUser, deleteUser, updateUser } from "../../models/users/users.model.js";
-// import { validateInput } from "../../utils/functions.utils.js";
 
 export const httpAddNewUser = async (req, res) => {
     const user = req.body;
-    // if (user.error) {
-    //     return res.status(400).json({ error: user.error });
-    // }
 
     try {
         await addNewUser(user);
@@ -17,13 +13,14 @@ export const httpAddNewUser = async (req, res) => {
 
 export const httpUpdateUser = async (req, res) => {
     const user = req.body;
-    // if (user.error) {
-    //     return res.status(400).json({ error: user.error });
-    // }
 
     try {
-        await updateUser(user);
-        return res.status(200).json({message: "User updated successfully"});
+        const result = await updateUser(user);
+        if (result) {
+            return res.status(200).json({message: "User updated successfully"});
+        } else {
+            return res.status(400).json({ message: `${user.email} doesn't exist in the db`});
+        }
     } catch (error) {
         return res.status(400).json({ error: "An error occured updating the user"})
     }

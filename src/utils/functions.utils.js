@@ -43,14 +43,11 @@ export const serverErrorHandler = (error, port, server) => {
     }
 }
 
-
 /**
- * Remove the image from the path
+ * Removes the image from the path
  * @param {String} path - local path where to remove the image
- * @param {String} imageUrl - image url from the database
+ * @param {String} filename - name of the image to remove
  */
-export const removeImageFromPath = async (path, imageUrl) => {
-    // Retrieve the filename of the image
-    const filename = imageUrl.split(`/${path}/`)[1];
+export const removeImageFromPath = async (path, filename) => {
     await fs.unlink(`${path}/${filename}`); // Remove the image
 }
