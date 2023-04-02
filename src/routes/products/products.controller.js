@@ -4,7 +4,11 @@ const IMAGE_PATH = "uploads";
 
 export const httpAddNewProduct = async (req, res) => {
     const productObject = req.body;
-    console.log(productObject);
+   
+    if (productObject.quantity <= 0 || productObject.quantity > 10) {
+        return res.status(400).json({message: "Product quantity not available"});
+    }
+
     try {
         const imageUrl = `${req.protocol}://${req.get("host")}/${IMAGE_PATH}/${req.file.filename}`;
         const product = {
