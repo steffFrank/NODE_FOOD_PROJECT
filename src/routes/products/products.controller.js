@@ -1,9 +1,10 @@
-import { addProduct, updateProduct } from "../../models/products/products.model.js";
+import { addProduct, deleteProduct, updateProduct } from "../../models/products/products.model.js";
 import { removeImageFromPath } from "../../utils/functions.utils.js";
 
 const IMAGE_PATH = "uploads";
 const getImageUrl = (req) => `${req.protocol}://${req.get("host")}/${IMAGE_PATH}/${req.file.filename}`;
 
+// Add a new product
 export const httpAddNewProduct = async (req, res) => {
     const productObject = req.body;
 
@@ -22,6 +23,8 @@ export const httpAddNewProduct = async (req, res) => {
     }
 }
 
+
+// Update an existing product
 export const httpUpdateProduct = async (req, res) => {
     const { productId } = req.params;
     let newProduct = {};
@@ -35,7 +38,6 @@ export const httpUpdateProduct = async (req, res) => {
         } else {
             newProduct = req.body;
         }
-        console.log(newProduct);
         const result = updateProduct(productId, newProduct);
         if (result) {
             res.status(200).json({ message: "Product modified successfully"});
@@ -46,6 +48,21 @@ export const httpUpdateProduct = async (req, res) => {
         console.error(error);
         res.status(500).json({error});
     }
-    
 }
 
+// Delete an existing product
+export const httpDeleteProduct = async (req, res) => {
+    const { productId } = req.params;
+
+    try {
+        const result = await deleteProduct(productId);
+        if (result) {
+            res.status(200).json({message: "Product deleted with success"});
+        } else {
+            res.status(404).json({message: "Product not found"});
+        }
+    } catch(error) {
+        console.log(error);
+        res.status(500).json({error});
+    }
+}
