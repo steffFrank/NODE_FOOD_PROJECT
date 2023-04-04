@@ -18,7 +18,7 @@ export const httpAddNewProduct = async (req, res) => {
         res.status(201).json({message: "Product added successfully"});
     }catch (error) {
          // Remove the file from the path in case of errors
-         removeImageFromPath(IMAGE_PATH, req.file.filename);
+         await removeImageFromPath(IMAGE_PATH, req.file.filename);
         res.status(400).json({error: error.message});
     }
 }
@@ -38,7 +38,8 @@ export const httpUpdateProduct = async (req, res) => {
         } else {
             newProduct = req.body;
         }
-        const result = updateProduct(productId, newProduct);
+        const result = await updateProduct(productId, newProduct);
+
         if (result) {
             res.status(200).json({ message: "Product modified successfully"});
         } else {
