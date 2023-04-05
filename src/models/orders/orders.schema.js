@@ -3,20 +3,12 @@ import mongoose from "mongoose";
 const orderSchema = new mongoose.Schema({
     products: [{
         type: String,
+        required: true,
     }],
     users: [{
         type: String,
+        required: true
     }]
 });
-
-const validateArray = arr => {
-    orderSchema.pre("save", function (next) {
-        this[arr] = _.uniq(this[arr]);
-        next();
-    });
-}
-
-validateArray("products");
-validateArray("users");
 
 export default mongoose.model("Order", orderSchema);

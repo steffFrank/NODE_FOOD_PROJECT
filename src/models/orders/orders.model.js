@@ -1,22 +1,7 @@
-import mongoose from "mongoose";
+import orders from "./orders.schema.js";
 
-const orderSchema = new mongoose.Schema({
-    products: [{
-        type: String,
-    }],
-    users: [{
-        type: String,
-    }]
-});
 
-const validateArray = arr => {
-    orderSchema.pre("save", function (next) {
-        this.arr = _.uniq(this.arr);
-        next();
-    });
+export const addNewOrder = async order => {
+    const doc = await orders.create(order);
+    return doc;
 }
-
-validateArray(products);
-validateArray(users);
-
-export default mongoose.model("Order", orderSchema);

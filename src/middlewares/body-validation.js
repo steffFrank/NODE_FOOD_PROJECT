@@ -22,3 +22,21 @@ export const validateInput = (req, res, next) => {
     }
     return res.status(400).json({error: "Missing required property" });
 }
+
+
+export const validateArrayInput = (req, res, next) => {
+    const bodyObject = req.body;
+    // Check for empty object
+    if (!Object.keys(bodyObject).length || !Object.keys(bodyObject).every(key => bodyObject[key].length > 0)) {
+        return res.status(400).json({error: "Missing required property"});
+    }
+
+    // Check for duplicates values in arrays
+    for (const key of Object.keys(bodyObject)) {
+        const keySet = new Set(bodyObject[key]);
+        if (keySet.size !== bodyObject[key].length) {
+            return res.status(400).json({error: "Duplicate values are not allowed"});
+        }
+    }
+    return next();
+}
