@@ -16,3 +16,8 @@ export const deleteOrder = async (orderId) => {
     return await orders.findByIdAndDelete({_id: orderId});
 }
 
+// Get all the orders
+export const getAllOrders = async () => {
+    const result = await orders.find();
+    return result;
+}

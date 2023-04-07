@@ -1,4 +1,4 @@
-import { addNewOrder, deleteOrder, updateOrder } from "../../models/orders/orders.model.js";
+import { addNewOrder, deleteOrder, updateOrder, getAllOrders } from "../../models/orders/orders.model.js";
 
 // Add an order
 export const httpAddNewOrder = async (req, res) => {
@@ -47,5 +47,18 @@ export const httpDeleteOrder = async (req, res) => {
         }
     } catch (error) {
         return res.status(500).json({ error: "internal server error" });
+    }
+}
+
+export const httpGetAllOrders = async (req, res) => {
+    try {
+        const result = await getAllOrders();
+        if (result) {
+            return res.status(200).json({ result });
+        } else {
+            return res.status(400).json({ error: "No order available"});
+        }
+    } catch (error) {
+        return res.status(500).json({ error: "Internal server error"});
     }
 }

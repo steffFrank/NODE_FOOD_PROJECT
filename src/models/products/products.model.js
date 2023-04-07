@@ -20,7 +20,7 @@ export const updateProduct = async (productId, newProduct) => {
 
 
 // Delete an existing product from the database
-export const deleteProduct = async (productId) => {
+export const deleteProduct = async productId => {
     const product = await products.findOneAndDelete({name: productId});
 
     // Delete the product if it exists and remove the image from the image folder
@@ -30,3 +30,4 @@ export const deleteProduct = async (productId) => {
     }
     return false;
 }
+
