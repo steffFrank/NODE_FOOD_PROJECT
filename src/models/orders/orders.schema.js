@@ -8,7 +8,9 @@ const orderSchema = new mongoose.Schema({
     users: [{
         type: String,
         required: true
-    }]
+    }],
+}, {
+    timestamps: true
 });
 
 export default mongoose.model("Order", orderSchema);
