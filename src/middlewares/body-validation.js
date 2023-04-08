@@ -4,6 +4,7 @@ import { checkArrayValues, removeImageFromPath } from "../utils/functions.utils.
 
 // Validate the body inputs before passing it to the next middleware
 export const validateInput = (req, res, next) => {
+    // No need to sanitize as we using mongoose
     const bodyObject = req.body;
 
     // Check if every key has a value and return an error response if not

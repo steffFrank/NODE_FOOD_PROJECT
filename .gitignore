@@ -12,7 +12,8 @@
 /build
 .env
 /uploads
-
+cert.pem
+key.pem
 
 # misc
 .DS_Store

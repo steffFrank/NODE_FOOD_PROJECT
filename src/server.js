@@ -1,13 +1,18 @@
-import http from "http";
+import fs from "fs";
+import https from "https";
 import { app } from "./app.js";
-import { normalizePort, serverErrorHandler } from "./utils/functions.utils.js";
+
 import { mongoConnect } from "./utils/mongo.utils.js";
+import { normalizePort, serverErrorHandler } from "./utils/functions.utils.js";
 
 const PORT = normalizePort(process.env.PORT || "5000");
 app.set(PORT);
 
 // Creates the server
-const server = http.createServer(app);
+const server = https.createServer({
+    cert: fs.readFileSync("cert.pem"),
+    key: fs.readFileSync("key.pem")
+},app);
 
 // Handles Errors
 server.on("error", error => {
