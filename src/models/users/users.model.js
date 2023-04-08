@@ -17,3 +17,6 @@ export const deleteUser = async email => {
     return false;
 }
 
+export const getAllUsers = async () => {
+    return await users.find();
+}

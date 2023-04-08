@@ -51,3 +51,13 @@ export const serverErrorHandler = (error, port, server) => {
 export const removeImageFromPath = async (path, filename) => {
     await fs.unlink(`${path}/${filename}`); // Remove the image
 }
+
+/**
+ * Check if all the values in arrayToCheck exist in arr
+ * @param {Array} arrayToCheck - array of string to check
+ * @param {Array} arr - array of string where to check
+ * @returns {Boolean} - true if all the values in arrayToCheck exist in arr
+ */
+export const checkArrayValues = (arrayToCheck, arr) => {
+    return arrayToCheck.every(val => arr.includes(val));
+}

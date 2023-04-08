@@ -31,3 +31,7 @@ export const deleteProduct = async productId => {
     return false;
 }
 
+// Get all products
+export const getAllProducts = async () => {
+    return await products.find();
+}

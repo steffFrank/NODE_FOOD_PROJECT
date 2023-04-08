@@ -7,7 +7,6 @@ export const addNewOrder = async order => {
 
 // update an order in the db
 export const updateOrder = async (orderId, newOrder) => {
-
     return await orders.findByIdAndUpdate({ _id: orderId }, newOrder );
 }
 
@@ -18,6 +17,6 @@ export const deleteOrder = async (orderId) => {
 
 // Get all the orders
 export const getAllOrders = async () => {
-    const result = await orders.find();
+    const result = await orders.find().sort({"createdAt" : 1});
     return result;
 }

@@ -1,4 +1,6 @@
-import { removeImageFromPath } from "../utils/functions.utils.js";
+import { getAllProducts } from "../models/products/products.model.js";
+import { getAllUsers } from "../models/users/users.model.js";
+import { checkArrayValues, removeImageFromPath } from "../utils/functions.utils.js";
 
 // Validate the body inputs before passing it to the next middleware
 export const validateInput = (req, res, next) => {
@@ -24,8 +26,14 @@ export const validateInput = (req, res, next) => {
 }
 
 
-export const validateArrayInput = (req, res, next) => {
+export const validateArrayInput = async (req, res, next) => {
+    // Get the bodyObject
     const bodyObject = req.body;
+    
+    // Get products and users array
+    const productsArray = (await getAllProducts()).map(product => product.name);
+    const usersArray = (await getAllUsers()).map(user => user.email);
+
     // Check for empty object
     if (!Object.keys(bodyObject).length || !Object.keys(bodyObject).every(key => bodyObject[key].length > 0)) {
         return res.status(400).json({error: "Missing required property"});
@@ -38,5 +46,19 @@ export const validateArrayInput = (req, res, next) => {
             return res.status(400).json({error: "Duplicate values are not allowed"});
         }
     }
+
+    // Check if the values in the array exist
+    const valuesExist = Object.keys(bodyObject).every(key => {
+        if (key === "products") {
+            return checkArrayValues(bodyObject[key], productsArray);
+        }
+        if (key === "users") {
+            return checkArrayValues(bodyObject[key], usersArray);
+        }
+    })
+
+    // Return error message if a value doesn't exist
+    if (!valuesExist) return res.status(404).json({error: "Values not found. A product or User in your lists doesn't exist"});
+
     return next();
 }
