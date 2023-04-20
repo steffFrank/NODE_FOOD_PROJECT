@@ -40,7 +40,7 @@ export const validateArrayInput = async (req, res, next) => {
         return res.status(400).json({error: "Missing required property"});
     }
 
-    // Check for duplicates values in arrays
+    // Check for duplicates values in body array
     for (const key of Object.keys(bodyObject)) {
         const keySet = new Set(bodyObject[key]);
         if (keySet.size !== bodyObject[key].length) {
@@ -48,7 +48,7 @@ export const validateArrayInput = async (req, res, next) => {
         }
     }
 
-    // Check if the values in the array exist
+    // Check if the values in the body array exist in the db
     const valuesExist = Object.keys(bodyObject).every(key => {
         if (key === "products") {
             return checkArrayValues(bodyObject[key], productsArray);
