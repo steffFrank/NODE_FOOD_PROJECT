@@ -36,7 +36,7 @@ describe("Test users API", () => {
                 .send({
                     "firstname": "firstnameTest",
                     "lastname": "lastnameTest",
-                    "email": "emailTest2@gmail.com"
+                    "email": "emailTest1@gmail.com"
                 })
                 .expect("Content-Type", /json/)
                 .expect(201)
@@ -52,13 +52,13 @@ describe("Test users API", () => {
                 .send({
                     "firstname": "firstnameTest",
                     "lastname": "lastnameTest",
-                    "email": "emailTest2@gmail.com"
+                    "email": "emailTest1@gmail.com"
                 })
                 .expect("Content-Type", /json/)
                 .expect(400)
 
                 expect(response.body).toMatchObject({
-                    error: "emailTest2@gmail.com already exists"
+                    error: "emailTest1@gmail.com already exists"
                 })
          });
     });
@@ -71,7 +71,7 @@ describe("Test users API", () => {
                 .send({
                     "firstname": "firstnameTestUpdate",
                     "lastname": "lastnameTestUpdate",
-                    "email": "emailTest2@gmail.com"    
+                    "email": "emailTest1@gmail.com"    
                 })
                 .expect(200);
 
@@ -87,6 +87,37 @@ describe("Test users API", () => {
                 .send({
                     "firstname": "firstnameTestUpdate",
                     "lastname": "lastnameTestUpdate",
+                    "email": "emailTest9@gmail.com"    
+                })
+                .expect(404);
+
+                expect(response.body).toMatchObject({
+                    error: "emailTest9@gmail.com doesn't exist in the db"
+                });
+        });
+    });
+
+    describe("Test DELETE /users ", () => {
+
+        test("it should respond with 200 if the user is deleted", async () => {
+            const response = await request(app)
+                .delete(endpoint)
+                .expect("Content-Type", /json/)
+                .send({
+                    "email": "emailTest1@gmail.com"    
+                })
+                .expect(200);
+
+                expect(response.body).toMatchObject({
+                    message: "User deleted successfully"
+                });
+        });
+
+        test("it should respond with 404 if the user doesn't exist", async () => {
+            const response = await request(app)
+                .delete(endpoint)
+                .expect("Content-Type", /json/)
+                .send({
                     "email": "emailTest9@gmail.com"    
                 })
                 .expect(404);
