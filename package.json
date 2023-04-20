@@ -6,7 +6,11 @@
   "main": "src/server.js",
   "scripts": {
     "watch": "nodemon src/server.js",
-    "start": "node src/server.js"
+    "start": "node src/server.js",
+    "test": "node --trace-warnings --experimental-vm-modules node_modules/jest/bin/jest.js --watch"
+  },
+  "jest": {
+    "testEnvironment": "node"
   },
   "keywords": [],
   "author": "Steff",
