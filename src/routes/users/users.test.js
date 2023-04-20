@@ -4,7 +4,7 @@ import { mongoConnect } from "../../utils/mongo.utils.js";
 import { mongoDisconnect } from "../../utils/mongo.utils.js";
 
 describe("Test users API", () => {
-
+    const endpoint = "/v1/users";
     beforeAll( async () => {
         await mongoConnect("test");
     });
@@ -13,10 +13,10 @@ describe("Test users API", () => {
         await mongoDisconnect();
     });
 
-    describe("Test POST /auth", () => {
+    describe("Test POST /users", () => {
         test("it should respond with status 400 if a property is missing",  async () => {
            const response = await request(app)
-            .post("/v1/auth")
+            .post(endpoint)
             .send({
                 firstname: "firstnameTest",
                 lastname: "lastnameTest",
@@ -32,11 +32,11 @@ describe("Test users API", () => {
     
         test("it should respond with status 201 if a user is created",  async () => {
             const response = await request(app)
-                .post("/v1/auth")
+                .post(endpoint)
                 .send({
                     "firstname": "firstnameTest",
                     "lastname": "lastnameTest",
-                    "email": "emailTest1@gmail.com"
+                    "email": "emailTest2@gmail.com"
                 })
                 .expect("Content-Type", /json/)
                 .expect(201)
@@ -48,19 +48,52 @@ describe("Test users API", () => {
 
          test("it should respond with status 400 if a user already exists",  async () => {
             const response = await request(app)
-                .post("/v1/auth")
+                .post(endpoint)
                 .send({
                     "firstname": "firstnameTest",
                     "lastname": "lastnameTest",
-                    "email": "emailTest1@gmail.com"
+                    "email": "emailTest2@gmail.com"
                 })
                 .expect("Content-Type", /json/)
                 .expect(400)
 
                 expect(response.body).toMatchObject({
-                    error: "emailTest1@gmail.com already exists"
+                    error: "emailTest2@gmail.com already exists"
                 })
          });
     });
 
+    describe("Test PUT /users", () => {
+        test("it should respond with 200 if the update was successfull", async () => {
+            const response = await request(app)
+                .put(endpoint)
+                .expect("Content-Type", /json/)
+                .send({
+                    "firstname": "firstnameTestUpdate",
+                    "lastname": "lastnameTestUpdate",
+                    "email": "emailTest2@gmail.com"    
+                })
+                .expect(200);
+
+                expect(response.body).toMatchObject({
+                    message: "User updated successfully"
+                });
+        });
+
+        test("it should respond with 404 if the user doens't exist", async () => {
+            const response = await request(app)
+                .put(endpoint)
+                .expect("Content-Type", /json/)
+                .send({
+                    "firstname": "firstnameTestUpdate",
+                    "lastname": "lastnameTestUpdate",
+                    "email": "emailTest9@gmail.com"    
+                })
+                .expect(404);
+
+                expect(response.body).toMatchObject({
+                    error: "emailTest9@gmail.com doesn't exist in the db"
+                });
+        });
+    })
 })
