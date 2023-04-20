@@ -16,9 +16,18 @@ mongoose.connection.on("error", error => {
 /**
  * Connect to mongoDb with Uri
  */
-export const mongoConnect = async () => {
+export const mongoConnect = async (env="prod") => {
+    
+    let url = "";
+
+    if (env === "test") {
+        url = process.env.TEST_MONGODB_URL
+    } else if (env === "prod") {
+        url = process.env.MONGODB_URL
+    }
+
     try {
-        await mongoose.connect(process.env.MONGODB_URL);
+        await mongoose.connect(url);
         console.log("Connected to mongoose");
     } catch(error) {
         console.error(error);
