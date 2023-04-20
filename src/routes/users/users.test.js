@@ -63,6 +63,4 @@ describe("Test users API", () => {
          });
     });
 
-    describe("PUT /auth")
-
 })
