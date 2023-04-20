@@ -5,6 +5,6 @@ import { ordersRouter } from "./routes/orders/orders.router.js";
 
 export const api = express.Router();
 
-api.use("/auth", usersRouter);
+api.use("/users", usersRouter);
 api.use("/products", productsRouter);
 api.use("/orders", ordersRouter);
