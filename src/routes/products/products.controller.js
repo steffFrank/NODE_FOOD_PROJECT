@@ -7,7 +7,7 @@ const getImageUrl = (req) => `${req.protocol}://${req.get("host")}/${IMAGE_PATH}
 // Add a new product
 export const httpAddNewProduct = async (req, res) => {
     const productObject = req.body;
-
+    
     try {
         const imageUrl = getImageUrl(req);
         const product = {
