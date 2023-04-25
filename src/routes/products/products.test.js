@@ -33,6 +33,18 @@ describe("Test Products API", () => {
             })
         });
 
+        test("it should respond with status 400 if the quantity is not valid", async () => {
+            const response = await request(app)
+                .post(endpoint)
+                .field("name", "pineapple")
+                .field("quantity", 14)
+                .attach("imageUrl", __dirname + "/tests_doc/fixtures/banana_test.png")
+                .expect("Content-Type", /json/)
+                .expect(400)
+            
+            expect(response.body).toMatchObject({error: "Product quantity not available"});
+        });
+
         test("it should respond with status 201 if a product is added", async () => {
             
             const response = await request(app)
