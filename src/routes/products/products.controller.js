@@ -23,7 +23,6 @@ export const httpAddNewProduct = async (req, res) => {
     }
 }
 
-
 // Update an existing product
 export const httpUpdateProduct = async (req, res) => {
     const { productId } = req.params;

@@ -42,7 +42,7 @@ export const httpDeleteOrder = async (req, res) => {
         if (result) {
             return res.status(200).json({ message: "order deleted with success"});
         } else {
-            return res.status(400).json({ error: "This order doesn't exist" });
+            return res.status(404).json({ error: "This order doesn't exist" });
         }
     } catch (error) {
         return res.status(500).json({ error: "internal server error" });
@@ -52,7 +52,6 @@ export const httpDeleteOrder = async (req, res) => {
 export const httpGetAllOrders = async (req, res) => {
     try {
         const result = await getAllOrders();
-        console.log(result)
         if (result) {
             return res.status(200).json({ result });
         } else {
