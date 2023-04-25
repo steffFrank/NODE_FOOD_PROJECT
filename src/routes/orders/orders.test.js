@@ -6,11 +6,11 @@ import { mongoDisconnect } from "../../utils/mongo.utils.js";
 describe("Test Products API", () => {
     const endpoint = "/v1/orders";
 
-    beforeAll( async () => {
+    beforeAll(async () => {
         await mongoConnect("test");
     });
 
-    afterAll( async () => {
+    afterAll(async () => {
         await mongoDisconnect();
     });
 
@@ -24,18 +24,18 @@ describe("Test Products API", () => {
                 })
                 .expect("Content-Type", /json/)
                 .expect(400)
-            
+
             expect(response.body).toMatchObject({
                 error: "Missing required property"
             });
         });
 
         test("it should respond with status 404 if a product or user is not found", async () => {
-            
+
             const response = await request(app)
                 .post(endpoint)
                 .send({
-                    products:["notFoundProduct"],
+                    products: ["notFoundProduct"],
                     users: ["user1@gmail.com"]
                 })
                 .expect(404)
@@ -46,11 +46,11 @@ describe("Test Products API", () => {
         });
 
         test("it should respond with status 400 if there are duplicates values in the arrays", async () => {
-            
+
             const response = await request(app)
                 .post(endpoint)
                 .send({
-                    products:["cheakpea", "cheakpea"],
+                    products: ["cheakpea", "cheakpea"],
                     users: ["user1@gmail.com"]
                 })
                 .expect(400)
@@ -61,17 +61,17 @@ describe("Test Products API", () => {
         });
 
         test("it should respond with status 201 if an order is added", async () => {
-            
+
             const response = await request(app)
                 .post(endpoint)
                 .send({
-                    products:["cheakpea"],
+                    products: ["cheakpea"],
                     users: ["user1@gmail.com"]
                 })
                 .expect(201);
-            
+
             expect(response.body.orderId).toBeDefined()
-           
+
         });
 
         test("it should respond with status 200 if an order is updated", async () => {
@@ -79,7 +79,7 @@ describe("Test Products API", () => {
             const postResponse = await request(app)
                 .post(endpoint)
                 .send({
-                    products:["spinach"],
+                    products: ["spinach"],
                     users: ["user1@gmail.com"]
                 });
             // Retrieve the orderId from the body
@@ -89,12 +89,12 @@ describe("Test Products API", () => {
             const response = await request(app)
                 .put(`${endpoint}/${orderId}`)
                 .send({
-                    products:["spinach", "cheakpea"],
+                    products: ["spinach", "cheakpea"],
                     users: ["user1@gmail.com", "user2@gmail.com"]
                 })
                 .expect(200);
 
-            expect(response.body).toMatchObject({ message: "order modified successfully"})
+            expect(response.body).toMatchObject({ message: "order modified successfully" })
         });
 
         test("it should respond with status 200 if an order is deleted", async () => {
@@ -102,21 +102,21 @@ describe("Test Products API", () => {
             const postResponse = await request(app)
                 .post(endpoint)
                 .send({
-                    products:["spinach", "cheakpea"],
+                    products: ["spinach", "cheakpea"],
                     users: ["user1@gmail.com", "user2@gmail.com"]
                 });
             // Retrieve the orderId from the body
             const { orderId } = postResponse.body;
-            
+
             // Delete the just created order
             const response = await request(app)
                 .delete(`${endpoint}/${orderId}`)
                 .expect(200);
 
-            expect(response.body).toMatchObject({ message: "order deleted with success"});
+            expect(response.body).toMatchObject({ message: "order deleted with success" });
         });
 
-        test("it should respond with status 404 if an order doesn't exist", async () => {            
+        test("it should respond with status 404 if an order doesn't exist", async () => {
             // Delete the just created order
             const response = await request(app)
                 .delete(`${endpoint}/6447af5867a8f2bf965e10b8`)
@@ -125,7 +125,7 @@ describe("Test Products API", () => {
             expect(response.body).toMatchObject({ error: "This order doesn't exist" });
         });
 
-        test("it should respond with status 200 if all orders are returned", async () => {            
+        test("it should respond with status 200 if all orders are returned", async () => {
             // Delete the just created order
             const response = await request(app)
                 .get(endpoint)

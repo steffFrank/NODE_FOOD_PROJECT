@@ -12,7 +12,7 @@ app.set(PORT);
 const server = https.createServer({
     cert: fs.readFileSync("cert.pem"),
     key: fs.readFileSync("key.pem")
-},app);
+}, app);
 
 // Handles Errors
 server.on("error", error => {

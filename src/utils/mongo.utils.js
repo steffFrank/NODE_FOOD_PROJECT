@@ -16,8 +16,8 @@ mongoose.connection.on("error", error => {
 /**
  * Connect to mongoDb with Uri
  */
-export const mongoConnect = async (env="prod") => {
-    
+export const mongoConnect = async (env = "prod") => {
+
     let url = "";
 
     if (env === "test") {
@@ -29,7 +29,7 @@ export const mongoConnect = async (env="prod") => {
     try {
         await mongoose.connect(url);
         console.log("Connected to mongoose");
-    } catch(error) {
+    } catch (error) {
         console.error(error);
     }
 }
@@ -42,11 +42,11 @@ export const mongoDisconnect = async () => {
 }
 
 export const uniqueValidator = async (schema, field) => {
-    schema.pre("save", async function(next) {
+    schema.pre("save", async function (next) {
         const doc = this;
         try {
             const model = mongoose.models[doc.constructor.modelName]
-            const fieldExists = await model.findOne({[field]: doc[field]}); 
+            const fieldExists = await model.findOne({ [field]: doc[field] });
             if (fieldExists) {
                 const error = new Error(`${doc[field]} already exists`);
                 return next(error);

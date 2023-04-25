@@ -10,11 +10,11 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 describe("Test Products API", () => {
     const endpoint = "/v1/products";
 
-    beforeAll( async () => {
+    beforeAll(async () => {
         await mongoConnect("test");
     });
 
-    afterAll( async () => {
+    afterAll(async () => {
         await mongoDisconnect();
     });
 
@@ -27,7 +27,7 @@ describe("Test Products API", () => {
                 .attach("imageUrl", "")
                 .expect("Content-Type", /json/)
                 .expect(400)
-            
+
             expect(response.body).toMatchObject({
                 error: "Missing required property"
             })
@@ -41,12 +41,12 @@ describe("Test Products API", () => {
                 .attach("imageUrl", __dirname + "/tests_doc/fixtures/banana_test.png")
                 .expect("Content-Type", /json/)
                 .expect(400)
-            
-            expect(response.body).toMatchObject({error: "Product quantity not available"});
+
+            expect(response.body).toMatchObject({ error: "Product quantity not available" });
         });
 
         test("it should respond with status 201 if a product is added", async () => {
-            
+
             const response = await request(app)
                 .post(endpoint)
                 .field("name", "productTest")
@@ -67,7 +67,7 @@ describe("Test Products API", () => {
                 .field("quantity", 3)
                 .attach("imageUrl", __dirname + "/tests_doc/fixtures/banana_test.png")
                 .expect(200)
-                
+
             expect(response.body).toMatchObject({
                 message: "Product modified successfully"
             });
@@ -78,7 +78,7 @@ describe("Test Products API", () => {
             const response = await request(app)
                 .delete(`${endpoint}/newProductTest`)
                 .expect(200)
-                
+
             expect(response.body).toMatchObject({
                 message: "Product deleted with success"
             });
@@ -88,7 +88,7 @@ describe("Test Products API", () => {
             const response = await request(app)
                 .delete(`${endpoint}/inexistingProduct`)
                 .expect(404)
-                
+
             expect(response.body).toMatchObject({
                 message: "Product not found"
             });

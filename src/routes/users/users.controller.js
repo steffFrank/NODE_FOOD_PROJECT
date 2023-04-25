@@ -6,9 +6,9 @@ export const httpAddNewUser = async (req, res) => {
 
     try {
         await addNewUser(user);
-        return res.status(201).json({message: "User registered successfully"});
-    } catch(error) {
-        return res.status(400).json({error: error.message});
+        return res.status(201).json({ message: "User registered successfully" });
+    } catch (error) {
+        return res.status(400).json({ error: error.message });
     }
 }
 
@@ -19,12 +19,12 @@ export const httpUpdateUser = async (req, res) => {
     try {
         const result = await updateUser(user);
         if (result) {
-            return res.status(200).json({message: "User updated successfully"});
+            return res.status(200).json({ message: "User updated successfully" });
         } else {
-            return res.status(404).json({ error: `${user.email} doesn't exist in the db`});
+            return res.status(404).json({ error: `${user.email} doesn't exist in the db` });
         }
     } catch (error) {
-        return res.status(400).json({ error: "An error occured updating the user"})
+        return res.status(400).json({ error: "An error occured updating the user" })
     }
 }
 
@@ -34,11 +34,11 @@ export const httpDeleteUser = async (req, res) => {
     try {
         const result = await deleteUser(user.email);
         if (result) {
-            return res.status(200).json({ message: "User deleted successfully"});
+            return res.status(200).json({ message: "User deleted successfully" });
         } else {
-            return res.status(404).json({ error: `${user.email} doesn't exist in the db`});
+            return res.status(404).json({ error: `${user.email} doesn't exist in the db` });
         }
-    } catch(error) {
-        return res.status(400).json({ error: "An error occured deleting the user"});
+    } catch (error) {
+        return res.status(400).json({ error: "An error occured deleting the user" });
     }
 }

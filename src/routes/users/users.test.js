@@ -4,127 +4,126 @@ import { mongoConnect } from "../../utils/mongo.utils.js";
 import { mongoDisconnect } from "../../utils/mongo.utils.js";
 
 describe("Test users API", () => {
-    const endpoint = "/v1/users";
-    beforeAll( async () => {
-        await mongoConnect("test");
+  const endpoint = "/v1/users";
+  beforeAll(async () => {
+    await mongoConnect("test");
+  });
+
+  afterAll(async () => {
+    await mongoDisconnect();
+  });
+
+  describe("Test POST /users", () => {
+    test("it should respond with status 400 if a property is missing", async () => {
+      const response = await request(app)
+        .post(endpoint)
+        .send({
+          firstname: "firstnameTest",
+          lastname: "lastnameTest",
+          email: "",
+        })
+        .expect("Content-Type", /json/)
+        .expect(400);
+
+      expect(response.body).toMatchObject({
+        error: "Missing required property",
+      });
     });
 
-    afterAll( async () => {
-        await mongoDisconnect();
+    test("it should respond with status 201 if a user is created", async () => {
+      const response = await request(app)
+        .post(endpoint)
+        .send({
+          firstname: "firstnameTest",
+          lastname: "lastnameTest",
+          email: "emailTest1@gmail.com",
+        })
+        .expect("Content-Type", /json/)
+        .expect(201);
+
+      expect(response.body).toMatchObject({
+        message: "User registered successfully",
+      });
     });
 
-    describe("Test POST /users", () => {
-        test("it should respond with status 400 if a property is missing",  async () => {
-           const response = await request(app)
-            .post(endpoint)
-            .send({
-                firstname: "firstnameTest",
-                lastname: "lastnameTest",
-                email: ""
-            })
-            .expect("Content-Type", /json/)
-            .expect(400);
-    
-            expect(response.body).toMatchObject({
-                error: "Missing required property"
-            })
-        });
-    
-        test("it should respond with status 201 if a user is created",  async () => {
-            const response = await request(app)
-                .post(endpoint)
-                .send({
-                    "firstname": "firstnameTest",
-                    "lastname": "lastnameTest",
-                    "email": "emailTest1@gmail.com"
-                })
-                .expect("Content-Type", /json/)
-                .expect(201)
+    test("it should respond with status 400 if a user already exists", async () => {
+      const response = await request(app)
+        .post(endpoint)
+        .send({
+          firstname: "firstnameTest",
+          lastname: "lastnameTest",
+          email: "emailTest1@gmail.com",
+        })
+        .expect("Content-Type", /json/)
+        .expect(400);
 
-                expect(response.body).toMatchObject({
-                    message: "User registered successfully"
-                })
-         });
+      expect(response.body).toMatchObject({
+        error: "emailTest1@gmail.com already exists",
+      });
+    });
+  });
 
-         test("it should respond with status 400 if a user already exists",  async () => {
-            const response = await request(app)
-                .post(endpoint)
-                .send({
-                    "firstname": "firstnameTest",
-                    "lastname": "lastnameTest",
-                    "email": "emailTest1@gmail.com"
-                })
-                .expect("Content-Type", /json/)
-                .expect(400)
+  describe("Test PUT /users", () => {
+    test("it should respond with 200 if the update was successfull", async () => {
+      const response = await request(app)
+        .put(endpoint)
+        .expect("Content-Type", /json/)
+        .send({
+          firstname: "firstnameTestUpdate",
+          lastname: "lastnameTestUpdate",
+          email: "emailTest1@gmail.com",
+        })
+        .expect(200);
 
-                expect(response.body).toMatchObject({
-                    error: "emailTest1@gmail.com already exists"
-                })
-         });
+      expect(response.body).toMatchObject({
+        message: "User updated successfully",
+      });
     });
 
-    describe("Test PUT /users", () => {
-        test("it should respond with 200 if the update was successfull", async () => {
-            const response = await request(app)
-                .put(endpoint)
-                .expect("Content-Type", /json/)
-                .send({
-                    "firstname": "firstnameTestUpdate",
-                    "lastname": "lastnameTestUpdate",
-                    "email": "emailTest1@gmail.com"    
-                })
-                .expect(200);
+    test("it should respond with 404 if the user doens't exist", async () => {
+      const response = await request(app)
+        .put(endpoint)
+        .expect("Content-Type", /json/)
+        .send({
+          firstname: "firstnameTestUpdate",
+          lastname: "lastnameTestUpdate",
+          email: "emailTest9@gmail.com",
+        })
+        .expect(404);
 
-                expect(response.body).toMatchObject({
-                    message: "User updated successfully"
-                });
-        });
+      expect(response.body).toMatchObject({
+        error: "emailTest9@gmail.com doesn't exist in the db",
+      });
+    });
+  });
 
-        test("it should respond with 404 if the user doens't exist", async () => {
-            const response = await request(app)
-                .put(endpoint)
-                .expect("Content-Type", /json/)
-                .send({
-                    "firstname": "firstnameTestUpdate",
-                    "lastname": "lastnameTestUpdate",
-                    "email": "emailTest9@gmail.com"    
-                })
-                .expect(404);
+  describe("Test DELETE /users ", () => {
+    test("it should respond with 200 if the user is deleted", async () => {
+      const response = await request(app)
+        .delete(endpoint)
+        .expect("Content-Type", /json/)
+        .send({
+          email: "emailTest1@gmail.com",
+        })
+        .expect(200);
 
-                expect(response.body).toMatchObject({
-                    error: "emailTest9@gmail.com doesn't exist in the db"
-                });
-        });
+      expect(response.body).toMatchObject({
+        message: "User deleted successfully",
+      });
     });
 
-    describe("Test DELETE /users ", () => {
+    test("it should respond with 404 if the user doesn't exist", async () => {
+      const response = await request(app)
+        .delete(endpoint)
+        .expect("Content-Type", /json/)
+        .send({
+          email: "emailTest9@gmail.com",
+        })
+        .expect(404);
 
-        test("it should respond with 200 if the user is deleted", async () => {
-            const response = await request(app)
-                .delete(endpoint)
-                .expect("Content-Type", /json/)
-                .send({
-                    "email": "emailTest1@gmail.com"    
-                })
-                .expect(200);
-
-                expect(response.body).toMatchObject({
-                    message: "User deleted successfully"
-                });
-        });
-
-        test("it should respond with 404 if the user doesn't exist", async () => {
-            const response = await request(app)
-                .delete(endpoint)
-                .expect("Content-Type", /json/)
-                .send({
-                    "email": "emailTest9@gmail.com"    
-                })
-                .expect(404);
-
-                expect(response.body).toMatchObject({
-                    error: "emailTest9@gmail.com doesn't exist in the db"
-                });
-        });
-    })
-})
+      expect(response.body).toMatchObject({
+        error: "emailTest9@gmail.com doesn't exist in the db",
+      });
+    });
+  });
+});

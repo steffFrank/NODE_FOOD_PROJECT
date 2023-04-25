@@ -8,7 +8,7 @@ export const addProduct = async product => {
 
 // Update an existing product in the database
 export const updateProduct = async (productId, newProduct) => {
-    const result = await products.findOneAndUpdate({name: productId}, newProduct);
+    const result = await products.findOneAndUpdate({ name: productId }, newProduct);
 
     if (result) {
         await removeImageFromPath("uploads", result.imageUrl.split("uploads")[1]);
@@ -21,7 +21,7 @@ export const updateProduct = async (productId, newProduct) => {
 
 // Delete an existing product from the database
 export const deleteProduct = async productId => {
-    const product = await products.findOneAndDelete({name: productId});
+    const product = await products.findOneAndDelete({ name: productId });
 
     // Delete the product if it exists and remove the image from the image folder
     if (product) {
