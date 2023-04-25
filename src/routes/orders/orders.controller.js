@@ -23,7 +23,6 @@ export const httpUpdateOrder = async (req, res) => {
 
     try {
         const result = await updateOrder(orderId, newOrder);
-        console.log(result);
         if (result) {
             return res.status(200).json({ message: "order modified successfully"});
         } else {
@@ -53,6 +52,7 @@ export const httpDeleteOrder = async (req, res) => {
 export const httpGetAllOrders = async (req, res) => {
     try {
         const result = await getAllOrders();
+        console.log(result)
         if (result) {
             return res.status(200).json({ result });
         } else {
