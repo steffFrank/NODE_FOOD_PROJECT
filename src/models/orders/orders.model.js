@@ -17,10 +17,10 @@ export const deleteOrder = async (orderId) => {
 
 // Get all the orders
 export const getAllOrders = async () => {
-    // const result = await orders.find().sort({products : -1});
     const result = await orders.aggregate([
         { $unwind: "$products"},
-        {$sort: {"products": 1, "createdAt": 1}}
+        { $sort: {"products": 1, "createdAt": 1}},
+        { $project: {"__v": 0}}
     ])
     return result;
 }
