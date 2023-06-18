@@ -4,6 +4,7 @@ import { mongoConnect } from "../../utils/mongo.utils.js";
 import { mongoDisconnect } from "../../utils/mongo.utils.js";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
+import Products from "../../models/products/products.schema.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -12,6 +13,9 @@ describe("Test Products API", () => {
 
     beforeAll(async () => {
         await mongoConnect("test");
+
+        await Products.deleteMany({});
+
     });
 
     afterAll(async () => {
@@ -23,7 +27,7 @@ describe("Test Products API", () => {
             const response = await request(app)
                 .post(endpoint)
                 .field("name", "")
-                .field("quantiry", 1)
+                .field("quantity", 1)
                 .attach("imageUrl", "")
                 .expect("Content-Type", /json/)
                 .expect(400)
@@ -50,6 +54,34 @@ describe("Test Products API", () => {
             const response = await request(app)
                 .post(endpoint)
                 .field("name", "productTest")
+                .field("quantity", 1)
+                .attach("imageUrl", __dirname + "/tests_doc/fixtures/banana_test.png")
+                .expect(201)
+
+            expect(response.body).toMatchObject({
+                message: "Product added successfully"
+            });
+        });
+
+        test("it should respond with status 201 if a product is added", async () => {
+
+            const response = await request(app)
+                .post(endpoint)
+                .field("name", "banana")
+                .field("quantity", 1)
+                .attach("imageUrl", __dirname + "/tests_doc/fixtures/banana_test.png")
+                .expect(201)
+
+            expect(response.body).toMatchObject({
+                message: "Product added successfully"
+            });
+        });
+
+        test("it should respond with status 201 if a product is added", async () => {
+
+            const response = await request(app)
+                .post(endpoint)
+                .field("name", "cheakpea")
                 .field("quantity", 1)
                 .attach("imageUrl", __dirname + "/tests_doc/fixtures/banana_test.png")
                 .expect(201)

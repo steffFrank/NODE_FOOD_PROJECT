@@ -2,11 +2,23 @@ import request from "supertest";
 import { app } from "../../app.js";
 import { mongoConnect } from "../../utils/mongo.utils.js";
 import { mongoDisconnect } from "../../utils/mongo.utils.js";
+import User from "../../models/users/users.schema.js";
 
 describe("Test users API", () => {
   const endpoint = "/v1/users";
   beforeAll(async () => {
     await mongoConnect("test");
+    
+    // Delete all the data
+    await User.deleteMany({});
+    
+    // Add some default users
+    const user1 = new User({firstname: "firstname1", lastname: "lastname1", email: "user1_test@gmail.com"});
+
+    const user2 = new User({firstname: "firstname2", lastname: "lastname2", email: "user2_test@gmail.com"});
+
+    await user1.save();
+    await user2.save();
   });
 
   afterAll(async () => {

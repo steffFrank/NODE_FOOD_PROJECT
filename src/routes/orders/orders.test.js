@@ -2,25 +2,28 @@ import request from "supertest";
 import { app } from "../../app.js";
 import { mongoConnect } from "../../utils/mongo.utils.js";
 import { mongoDisconnect } from "../../utils/mongo.utils.js";
+import Order from "../../models/orders/orders.schema.js";
 
 describe("Test Products API", () => {
     const endpoint = "/v1/orders";
 
     beforeAll(async () => {
         await mongoConnect("test");
+
+        await Order.deleteMany({});
     });
 
     afterAll(async () => {
         await mongoDisconnect();
     });
 
-    describe("Test POST product", () => {
+    describe("Test order", () => {
         test("it should respond with status 400 if a property is emtpy", async () => {
             const response = await request(app)
                 .post(endpoint)
                 .send({
                     products: [],
-                    users: ["user1@gmail.com"]
+                    users: ["user1_test@gmail.com"]
                 })
                 .expect("Content-Type", /json/)
                 .expect(400)
@@ -36,7 +39,7 @@ describe("Test Products API", () => {
                 .post(endpoint)
                 .send({
                     products: ["notFoundProduct"],
-                    users: ["user1@gmail.com"]
+                    users: ["user1_test@gmail.com"]
                 })
                 .expect(404)
 
@@ -51,7 +54,7 @@ describe("Test Products API", () => {
                 .post(endpoint)
                 .send({
                     products: ["cheakpea", "cheakpea"],
-                    users: ["user1@gmail.com"]
+                    users: ["user1_test@gmail.com"]
                 })
                 .expect(400)
 
@@ -65,8 +68,8 @@ describe("Test Products API", () => {
             const response = await request(app)
                 .post(endpoint)
                 .send({
-                    products: ["cheakpea"],
-                    users: ["user1@gmail.com"]
+                    products: ["banana"],
+                    users: ["user1_test@gmail.com"]
                 })
                 .expect(201);
 
@@ -79,8 +82,8 @@ describe("Test Products API", () => {
             const postResponse = await request(app)
                 .post(endpoint)
                 .send({
-                    products: ["spinach"],
-                    users: ["user1@gmail.com"]
+                    products: ["banana"],
+                    users: ["user1_test@gmail.com"]
                 });
             // Retrieve the orderId from the body
             const { orderId } = postResponse.body;
@@ -89,8 +92,8 @@ describe("Test Products API", () => {
             const response = await request(app)
                 .put(`${endpoint}/${orderId}`)
                 .send({
-                    products: ["spinach", "cheakpea"],
-                    users: ["user1@gmail.com", "user2@gmail.com"]
+                    products: ["banana", "cheakpea"],
+                    users: ["user1_test@gmail.com", "user2_test@gmail.com"]
                 })
                 .expect(200);
 
@@ -102,8 +105,8 @@ describe("Test Products API", () => {
             const postResponse = await request(app)
                 .post(endpoint)
                 .send({
-                    products: ["spinach", "cheakpea"],
-                    users: ["user1@gmail.com", "user2@gmail.com"]
+                    products: ["banana", "cheakpea"],
+                    users: ["user1_test@gmail.com", "user2_test@gmail.com"]
                 });
             // Retrieve the orderId from the body
             const { orderId } = postResponse.body;

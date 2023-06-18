@@ -14,9 +14,7 @@ export const httpAddNewOrder = async (req, res) => {
     if (result) {
       return res.status(201).json({ orderId: result._id });
     } else {
-      return res
-        .status(400)
-        .json({ error: "something went wrong making the order" });
+      return res.status(400).json({ error: "something went wrong making the order" });
     }
   } catch (error) {
     return res.status(500).json({ error });
