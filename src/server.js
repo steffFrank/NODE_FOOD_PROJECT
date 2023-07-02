@@ -8,13 +8,11 @@ import { normalizePort, serverErrorHandler } from "./utils/functions.utils.js";
 const PORT = normalizePort(process.env.PORT || "5000");
 app.set(PORT);
 
-// Creates the server
 const server = https.createServer({
     cert: fs.readFileSync("cert.pem"),
     key: fs.readFileSync("key.pem")
 }, app);
 
-// Handles Errors
 server.on("error", error => {
     serverErrorHandler(error, PORT, server);
 });
@@ -26,7 +24,7 @@ server.on("listening", () => {
     console.log("Listening on " + bind);
 });
 
-// Starts the server
+
 const startServer = async () => {
     await mongoConnect();
     server.listen(PORT);

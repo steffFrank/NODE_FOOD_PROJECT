@@ -1,11 +1,11 @@
-import { addProduct, deleteProduct, updateProduct } from "../../models/products/products.model.js";
+import { addProductInDb, deleteProductFromDb, updateProductInDb } from "../../models/products/products.model.js";
 import { removeImageFromPath } from "../../utils/functions.utils.js";
 
 const IMAGE_PATH = "uploads";
 const getImageUrl = (req) => `${req.protocol}://${req.get("host")}/${IMAGE_PATH}/${req.file.filename}`;
 
-// Add a new product
 export const httpAddNewProduct = async (req, res) => {
+
     const productObject = req.body;
 
     try {
@@ -14,17 +14,16 @@ export const httpAddNewProduct = async (req, res) => {
             ...productObject,
             imageUrl,
         }
-        await addProduct(product);
+        await addProductInDb(product);
         res.status(201).json({ message: "Product added successfully" });
     } catch (error) {
-        // Remove the file from the path in case of errors
         await removeImageFromPath(IMAGE_PATH, req.file.filename);
         res.status(400).json({ error: error.message });
     }
 }
 
-// Update an existing product
 export const httpUpdateProduct = async (req, res) => {
+
     const { productId } = req.params;
     let newProduct = {};
 
@@ -37,7 +36,7 @@ export const httpUpdateProduct = async (req, res) => {
         } else {
             newProduct = req.body;
         }
-        const result = await updateProduct(productId, newProduct);
+        const result = await updateProductInDb(productId, newProduct);
 
         if (result) {
             res.status(200).json({ message: "Product modified successfully" });
@@ -50,12 +49,12 @@ export const httpUpdateProduct = async (req, res) => {
     }
 }
 
-// Delete an existing product
 export const httpDeleteProduct = async (req, res) => {
+    
     const { productId } = req.params;
 
     try {
-        const result = await deleteProduct(productId);
+        const result = await deleteProductFromDb(productId);
         if (result) {
             res.status(200).json({ message: "Product deleted with success" });
         } else {

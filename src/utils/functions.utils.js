@@ -1,5 +1,4 @@
 import fs from "fs/promises";
-//Utility functions
 
 /**
  * Normalizes a value to use as a port

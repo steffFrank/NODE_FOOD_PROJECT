@@ -1,13 +1,12 @@
 import { removeImageFromPath } from "../../utils/functions.utils.js";
 import products from "./products.schema.js";
 
-// Add a product to the database
-export const addProduct = async product => {
+export const addProductInDb = async product => {
     await products.create(product);
 }
 
 // Update an existing product in the database
-export const updateProduct = async (productId, newProduct) => {
+export const updateProductInDb = async (productId, newProduct) => {
     const result = await products.findOneAndUpdate({ name: productId }, newProduct);
 
     if (result) {
@@ -19,11 +18,9 @@ export const updateProduct = async (productId, newProduct) => {
 }
 
 
-// Delete an existing product from the database
-export const deleteProduct = async productId => {
+export const deleteProductFromDb = async productId => {
     const product = await products.findOneAndDelete({ name: productId });
 
-    // Delete the product if it exists and remove the image from the image folder
     if (product) {
         await removeImageFromPath("uploads", product.imageUrl.split("uploads")[1]);
         return true;
@@ -31,7 +28,6 @@ export const deleteProduct = async productId => {
     return false;
 }
 
-// Get all products
-export const getAllProducts = async () => {
+export const getAllProductsFromDb = async () => {
     return await products.find();
 }

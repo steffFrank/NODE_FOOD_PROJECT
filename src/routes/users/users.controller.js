@@ -1,23 +1,23 @@
-import { addNewUser, deleteUser, updateUser } from "../../models/users/users.model.js";
+import { addNewUserInDb, deleteUserFromDb, updateUserInDb } from "../../models/users/users.model.js";
 
-// Adds a new User
 export const httpAddNewUser = async (req, res) => {
+
     const user = req.body;
 
     try {
-        await addNewUser(user);
+        await addNewUserInDb(user);
         return res.status(201).json({ message: "User registered successfully" });
     } catch (error) {
         return res.status(400).json({ error: error.message });
     }
 }
 
-// Updates an existing user
 export const httpUpdateUser = async (req, res) => {
+
     const user = req.body;
 
     try {
-        const result = await updateUser(user);
+        const result = await updateUserInDb(user);
         if (result) {
             return res.status(200).json({ message: "User updated successfully" });
         } else {
@@ -28,11 +28,12 @@ export const httpUpdateUser = async (req, res) => {
     }
 }
 
-// Deletes an existing user
 export const httpDeleteUser = async (req, res) => {
+
     const user = req.body;
+    
     try {
-        const result = await deleteUser(user.email);
+        const result = await deleteUserFromDb(user.email);
         if (result) {
             return res.status(200).json({ message: "User deleted successfully" });
         } else {

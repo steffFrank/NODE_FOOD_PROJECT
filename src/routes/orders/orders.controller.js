@@ -1,16 +1,17 @@
 import {
-  addNewOrder,
-  deleteOrder,
-  updateOrder,
-  getAllOrders,
+  addNewOrderInDb,
+  deleteOrderFromDb,
+  updateOrderInDb,
+  getAllOrdersFromDb,
 } from "../../models/orders/orders.model.js";
 
-// Add an order
 export const httpAddNewOrder = async (req, res) => {
+
   const order = req.body;
 
   try {
-    const result = await addNewOrder(order);
+    const result = await addNewOrderInDb(order);
+
     if (result) {
       return res.status(201).json({ orderId: result._id });
     } else {
@@ -21,13 +22,14 @@ export const httpAddNewOrder = async (req, res) => {
   }
 };
 
-// Update an existing order
 export const httpUpdateOrder = async (req, res) => {
+
   const { orderId } = req.params;
   const newOrder = req.body;
 
   try {
-    const result = await updateOrder(orderId, newOrder);
+    const result = await updateOrderInDb(orderId, newOrder);
+
     if (result) {
       return res.status(200).json({ message: "order modified successfully" });
     } else {
@@ -38,12 +40,12 @@ export const httpUpdateOrder = async (req, res) => {
   }
 };
 
-// Delete an existing order
 export const httpDeleteOrder = async (req, res) => {
   const { orderId } = req.params;
 
   try {
-    const result = await deleteOrder(orderId);
+    const result = await deleteOrderFromDb(orderId);
+
     if (result) {
       return res.status(200).json({ message: "order deleted with success" });
     } else {
@@ -55,8 +57,9 @@ export const httpDeleteOrder = async (req, res) => {
 };
 
 export const httpGetAllOrders = async (req, res) => {
+  
   try {
-    const result = await getAllOrders();
+    const result = await getAllOrdersFromDb();
     if (result) {
       return res.status(200).json({ result });
     } else {
