@@ -1,8 +1,8 @@
 import request from "supertest";
-import { app } from "../../app.js";
-import { mongoConnect } from "../../utils/mongo.utils.js";
-import { mongoDisconnect } from "../../utils/mongo.utils.js";
-import Order from "../../models/orders/orders.schema.js";
+import { app } from "../../app";
+import { mongoConnect } from "../../utils/mongo.utils";
+import { mongoDisconnect } from "../../utils/mongo.utils";
+import Order from "../../models/orders/orders.schema";
 
 describe("Test Products API", () => {
     const endpoint = "/v1/orders";

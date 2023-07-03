@@ -1,12 +1,11 @@
+import * as path from "path";
 import request from "supertest";
-import { app } from "../../app.js";
-import { mongoConnect } from "../../utils/mongo.utils.js";
-import { mongoDisconnect } from "../../utils/mongo.utils.js";
-import { fileURLToPath } from "url";
-import { dirname } from "path";
-import Products from "../../models/products/products.schema.js";
+import { app } from "../../app";
+import { mongoConnect } from "../../utils/mongo.utils";
+import { mongoDisconnect } from "../../utils/mongo.utils";
+import Products from "../../models/products/products.schema";
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
+// const __dirname = path.dirname(__filename);
 
 describe("Test Products API", () => {
     const endpoint = "/v1/products";

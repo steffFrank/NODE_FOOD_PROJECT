@@ -12,6 +12,7 @@
 /build
 .env
 /uploads
+/dist
 cert.pem
 key.pem
 

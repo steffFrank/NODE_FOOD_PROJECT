@@ -1,13 +1,13 @@
-import express from "express";
-import { validateRequestBodyInputs } from "../../middlewares/body-validation.js";
-import multerConfig from "../../middlewares/multer-config.js";
+import express, { Router } from "express";
+import { validateRequestBodyInputs } from "../../middlewares/body-validation";
+import multerConfig from "../../middlewares/multer-config";
 import {
   httpAddNewProduct,
   httpDeleteProduct,
   httpUpdateProduct,
-} from "./products.controller.js";
+} from "./products.controller";
 
-export const productsRouter = express.Router();
+export const productsRouter: Router = express.Router();
 
 productsRouter.post("/",
  multerConfig, 

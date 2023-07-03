@@ -1,19 +1,19 @@
 import fs from "fs";
 import https from "https";
-import { app } from "./app.js";
+import { app } from "./app";
+import { Server } from "http";
+import { mongoConnect } from "./utils/mongo.utils";
+import { normalizePort, serverErrorHandler } from "./utils/functions.utils";
 
-import { mongoConnect } from "./utils/mongo.utils.js";
-import { normalizePort, serverErrorHandler } from "./utils/functions.utils.js";
+const PORT: string | number | boolean = normalizePort(process.env.PORT || "5000");
+app.set("port", PORT);
 
-const PORT = normalizePort(process.env.PORT || "5000");
-app.set(PORT);
-
-const server = https.createServer({
+const server: Server = https.createServer({
     cert: fs.readFileSync("cert.pem"),
     key: fs.readFileSync("key.pem")
 }, app);
 
-server.on("error", error => {
+server.on("error", (error: NodeJS.ErrnoException) => {
     serverErrorHandler(error, PORT, server);
 });
 

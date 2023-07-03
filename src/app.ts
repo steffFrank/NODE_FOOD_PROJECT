@@ -3,12 +3,10 @@ import cors from "cors";
 import morgan from "morgan";
 import helmet from "helmet";
 
-import { fileURLToPath } from "url";
-import path, { dirname } from "path";
+import { api } from "./api";
+import * as path from "path";
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
-
-import { api } from "./api.js";
+// const __dirname: string = path.dirname(__filename);
 
 export const app = express();
 

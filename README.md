@@ -7,6 +7,7 @@ This project involves developing a RESTful JSON API for a food company's group-b
 * ExpressJs  
 * MongoDb  
 * NodeJs  
+* Typescript  
 
 ## Installation  
 1. Clone the repo  
@@ -33,7 +34,14 @@ openssl req -x509 -newkey rsa:4096 -nodes -keyout key.pem -out cert.pem -days 36
 ```sh  
 npm start  
 ```  
-
+6. Run the tests  - executed on the .ts files in src folder
+```sh  
+npm test  
+```  
+7. Run the build - Results in the dist folder  
+```sh  
+npm run build    
+```
 
 
 
@@ -44,9 +52,6 @@ npm start
 -  To update the order, change the orderId variable with the new one you want to update  
 
 - Run the following to be sure all the tests are passing    
-```sh  
-npm test  
-```
 
 ## License  
 MIT license  

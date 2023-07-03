@@ -1,11 +1,13 @@
-import { getAllProductsFromDb } from "../models/products/products.model.js";
-import { getAllUsersFromDb } from "../models/users/users.model.js";
+import { getAllProductsFromDb } from "../models/products/products.model";
+import { getAllUsersFromDb } from "../models/users/users.model";
+import { Request, Response, NextFunction } from "express";
 import {
     checkArrayValues,
     removeImageFromPath,
-} from "../utils/functions.utils.js";
+} from "../utils/functions.utils";
 
-export const validateRequestBodyInputs = (req, res, next) => {
+
+export const validateRequestBodyInputs = (req: Request, res: Response, next: NextFunction): Response | void => {
     // No need to sanitize as we are using mongoose
 
     const bodyObject = req.body;
@@ -34,14 +36,22 @@ export const validateRequestBodyInputs = (req, res, next) => {
     return res.status(400).json({ error: "Missing required property" });
 };
 
-export const validateRequestBodyArray = async (req, res, next) => {
+type Product = {
+    name: string
+}
+
+type User = {
+    email: string
+}
+
+export const validateRequestBodyArray = async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
     const bodyObject = req.body;
     const bodyObjectKeys = Object.keys(bodyObject);
 
-    const productNamesList = (await getAllProductsFromDb()).map(
-        (product) => product.name
+    const productNamesList: string[] = (await getAllProductsFromDb()).map(
+        (product: Product) => product.name
     );
-    const userEmailsList = (await getAllUsersFromDb()).map((user) => user.email);
+    const userEmailsList = (await getAllUsersFromDb()).map((user: User) => user.email);
 
     // Check for empty object
     if (
@@ -53,7 +63,7 @@ export const validateRequestBodyArray = async (req, res, next) => {
 
     // Check for duplicates values in body array
     for (const key of bodyObjectKeys) {
-        const keySet = new Set(bodyObject[key]);
+        const keySet: Set<string> = new Set(bodyObject[key]);
         if (keySet.size !== bodyObject[key].length) {
             return res
                 .status(400)
@@ -62,7 +72,7 @@ export const validateRequestBodyArray = async (req, res, next) => {
     }
 
     // Check if the values in the body array exist in the db
-    const areValuesFound = bodyObjectKeys.every((key) => {
+    const areValuesFound: boolean = bodyObjectKeys.every((key: string) => {
         if (key === "products") {
             return checkArrayValues(bodyObject[key], productNamesList);
         }

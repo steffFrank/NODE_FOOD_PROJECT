@@ -2,15 +2,32 @@
   "name": "node_food_project",
   "version": "1.0.0",
   "description": "S2I Food API project",
-  "type": "module",
-  "main": "src/server.js",
+  "type": "commonjs",
+  "main": "src/server.ts",
   "scripts": {
-    "watch": "nodemon src/server.js",
-    "start": "node src/server.js",
-    "test": "node --trace-warnings --experimental-vm-modules node_modules/jest/bin/jest.js --watch"
+    "build": "tsc",
+    "start": "nodemon dist/server.js",
+    "watch": "nodemon --watch src --ext ts,js --exec ts-node src/server.ts",
+    "test": "jest --watch"
   },
   "jest": {
-    "testEnvironment": "node"
+    "transform": {
+      "^.+\\.(ts|tsx)$": "ts-jest"
+    },
+    "testEnvironment": "node",
+    "testRegex": "/src/.*\\.(test|spec)?\\.(ts|tsx)$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ],
+    "collectCoverageFrom": [
+      "src/**/*.{ts,tsx}",
+      "!src/**/*.d.ts"
+    ]
   },
   "keywords": [],
   "author": "Steff",
@@ -28,6 +45,18 @@
     "supertest": "^6.3.3"
   },
   "devDependencies": {
-    "nodemon": "^2.0.22"
+    "@types/cors": "^2.8.13",
+    "@types/dotenv": "^8.2.0",
+    "@types/express": "^4.17.17",
+    "@types/jest": "^29.5.2",
+    "@types/mongoose": "^5.11.97",
+    "@types/morgan": "^1.9.4",
+    "@types/multer": "^1.4.7",
+    "@types/node": "^20.3.3",
+    "@types/supertest": "^2.0.12",
+    "esm": "^3.2.25",
+    "nodemon": "^2.0.22",
+    "ts-jest": "^29.1.1",
+    "ts-node": "^10.9.1"
   }
 }

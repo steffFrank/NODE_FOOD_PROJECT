@@ -1,11 +1,13 @@
+import { Request, Response } from "express";
 import {
   addNewOrderInDb,
   deleteOrderFromDb,
   updateOrderInDb,
   getAllOrdersFromDb,
-} from "../../models/orders/orders.model.js";
+} from "../../models/orders/orders.model";
 
-export const httpAddNewOrder = async (req, res) => {
+
+export const httpAddNewOrder = async (req: Request, res: Response): Promise<Response> => {
 
   const order = req.body;
 
@@ -22,7 +24,7 @@ export const httpAddNewOrder = async (req, res) => {
   }
 };
 
-export const httpUpdateOrder = async (req, res) => {
+export const httpUpdateOrder = async (req: Request, res: Response): Promise<Response> => {
 
   const { orderId } = req.params;
   const newOrder = req.body;
@@ -40,7 +42,7 @@ export const httpUpdateOrder = async (req, res) => {
   }
 };
 
-export const httpDeleteOrder = async (req, res) => {
+export const httpDeleteOrder = async (req: Request, res: Response): Promise<Response> => {
   const { orderId } = req.params;
 
   try {
@@ -56,7 +58,7 @@ export const httpDeleteOrder = async (req, res) => {
   }
 };
 
-export const httpGetAllOrders = async (req, res) => {
+export const httpGetAllOrders = async (req: Request, res: Response): Promise<Response> => {
   
   try {
     const result = await getAllOrdersFromDb();

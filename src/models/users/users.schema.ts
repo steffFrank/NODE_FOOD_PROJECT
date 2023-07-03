@@ -1,7 +1,12 @@
-import mongoose from "mongoose";
-import { uniqueValidator } from "../../utils/mongo.utils.js";
+import mongoose, {Document, Schema} from "mongoose";
+import { uniqueValidator } from "../../utils/mongo.utils";
 
-const userSchema = new mongoose.Schema({
+export interface IUser extends Document {
+    firstname: string;
+    lastname: string;
+    email: string;
+}
+const userSchema = new Schema({
     firstname: {
         type: String,
         required: true
@@ -19,6 +24,6 @@ const userSchema = new mongoose.Schema({
     }
 });
 
-await uniqueValidator(userSchema, "email");
+uniqueValidator(userSchema, "email", "User");
 
 export default mongoose.model("User", userSchema);

@@ -1,12 +1,13 @@
-import { removeImageFromPath } from "../../utils/functions.utils.js";
-import products from "./products.schema.js";
+import { removeImageFromPath } from "../../utils/functions.utils";
+import products from "./products.schema";
+import { IProduct } from "./products.schema";
 
-export const addProductInDb = async product => {
-    await products.create(product);
+export const addProductInDb = async (product: IProduct): Promise<IProduct> => {
+    return await products.create(product);
 }
 
 // Update an existing product in the database
-export const updateProductInDb = async (productId, newProduct) => {
+export const updateProductInDb = async (productId: string, newProduct: IProduct): Promise<boolean> => {
     const result = await products.findOneAndUpdate({ name: productId }, newProduct);
 
     if (result) {
@@ -18,7 +19,7 @@ export const updateProductInDb = async (productId, newProduct) => {
 }
 
 
-export const deleteProductFromDb = async productId => {
+export const deleteProductFromDb = async (productId: string): Promise<Boolean> => {
     const product = await products.findOneAndDelete({ name: productId });
 
     if (product) {
@@ -28,6 +29,6 @@ export const deleteProductFromDb = async productId => {
     return false;
 }
 
-export const getAllProductsFromDb = async () => {
+export const getAllProductsFromDb = async (): Promise<IProduct[]> => {
     return await products.find();
 }

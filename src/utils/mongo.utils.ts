@@ -16,20 +16,26 @@ mongoose.connection.on("error", error => {
 /**
  * Connect to mongoDb with Uri
  */
-export const mongoConnect = async (env = "prod") => {
+export const mongoConnect = async (env: string = "prod"): Promise<void> => {
 
-    let url = "";
+    let url: string = "";
 
     if (env === "test") {
-        url = process.env.TEST_MONGODB_URL
+        if (!process.env.TEST_MONGODB_URL) {
+            throw new Error("TEST_MONGODB_URL is not defined");
+        }
+        url = process.env.TEST_MONGODB_URL;
     } else if (env === "prod") {
-        url = process.env.MONGODB_URL
+        if (!process.env.MONGODB_URL) {
+            throw new Error("MONGODB_URL is not defined");
+        }
+        url = process.env.MONGODB_URL;
     }
 
     try {
         await mongoose.connect(url);
         console.log("Connected to mongoose");
-    } catch (error) {
+    } catch (error: any) {
         console.error(error);
     }
 }
@@ -41,18 +47,18 @@ export const mongoDisconnect = async () => {
     await mongoose.disconnect();
 }
 
-export const uniqueValidator = async (schema, field) => {
+export const uniqueValidator = async (schema: mongoose.Schema, field: string, modelName: string) => {
     schema.pre("save", async function (next) {
         const doc = this;
         try {
-            const model = mongoose.models[doc.constructor.modelName]
+            const model = mongoose.models[modelName]
             const fieldExists = await model.findOne({ [field]: doc[field] });
             if (fieldExists) {
                 const error = new Error(`${doc[field]} already exists`);
                 return next(error);
             }
             next();
-        } catch (error) {
+        } catch (error: any) {
             return next(error);
         }
     });
