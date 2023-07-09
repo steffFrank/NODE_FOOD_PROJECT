@@ -6,7 +6,7 @@
   "main": "src/server.ts",
   "scripts": {
     "build": "tsc",
-    "start": "nodemon dist/server.js",
+    "start": "tsc && nodemon dist/server.js",
     "watch": "nodemon --watch src --ext ts,js --exec ts-node src/server.ts",
     "test": "jest --watch"
   },
